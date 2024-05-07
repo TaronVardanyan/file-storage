@@ -1,10 +1,14 @@
 import { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from 'next/font/google';
 import ConvexClientProvider from "./ConvexClientProvider";
+import Header from "./header";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Poppins({
+  subsets: ['latin'],
+  weight: ['500'],
+})
 
 export const metadata: Metadata = {
   title: "File Drive",
@@ -18,8 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+      <body className={font.className}>
+        <ConvexClientProvider>
+          <Header/>
+          {children}
+        </ConvexClientProvider>
       </body>
     </html>
   );
