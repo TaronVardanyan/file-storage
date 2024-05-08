@@ -11,7 +11,7 @@ const font = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: "File Drive",
+  title: "File Storage",
   description: "File Storage for personal purposes",
 };
 
