@@ -1,5 +1,13 @@
-import { mutation, query } from './_generated/server';
+import { mutation, query, QueryCtx, MutationCtx } from './_generated/server';
 import { v, ConvexError } from 'convex/values';
+import { getUser } from './users';
+
+async function hasAccessToOrg(ctx: QueryCtx | MutationCtx, tokenIdentifier: string, orgId: string) {
+  const user = await getUser(ctx, tokenIdentifier);
+  const hasAccess = user.orgIds.includes(orgId) && user.tokenIdentifier.includes(orgId);
+
+  return hasAccess;
+}
 
 export const createFile = mutation({
   args: {
@@ -11,6 +19,12 @@ export const createFile = mutation({
 
     if (!identity) {
       throw new ConvexError('Unauthorized');
+    }
+
+    const hasAccess = await hasAccessToOrg(ctx, identity.tokenIdentifier, args.orgId);
+
+    if (!hasAccess) {
+      throw new ConvexError('You do not have access to this Organization');
     }
 
     await ctx.db.insert('files', {
@@ -28,7 +42,13 @@ export const getFiles = query({
     const identity = await ctx.auth.getUserIdentity();
 
     if (!identity) {
-      throw new ConvexError('Unauthorized');
+      return [];
+    }
+
+    const hasAccess = await hasAccessToOrg(ctx, identity.tokenIdentifier, args.orgId);
+
+    if (!hasAccess) {
+      return [];
     }
 
     return ctx.db
