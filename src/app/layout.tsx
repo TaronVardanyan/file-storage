@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import ConvexClientProvider from './ConvexClientProvider';
+import { Toaster } from '@/components/ui/toaster';
 import Header from './header';
 import './globals.css';
 
@@ -26,6 +27,7 @@ export default function RootLayout({
         <ConvexClientProvider>
           <Header />
           {children}
+          <Toaster />
         </ConvexClientProvider>
       </body>
     </html>
