@@ -6,6 +6,10 @@ import { useOrganization, useUser } from '@clerk/nextjs';
 import { api } from '../../convex/_generated/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useToast } from '@/components/ui/use-toast';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
 import { z } from 'zod';
 import {
   Dialog,
@@ -22,8 +26,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { useState } from 'react';
 
 const formSchema = z.object({
   title: z.string().min(1).max(200),
@@ -33,6 +35,7 @@ const formSchema = z.object({
 });
 
 export default function LandingPage() {
+  const { toast } = useToast();
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
   const [isFileDialogOpen, setFileDialogOpen] = useState(false);
   const { isLoaded, organization } = useOrganization();
@@ -64,14 +67,29 @@ export default function LandingPage() {
 
     const { storageId } = await result.json();
 
-    await createFile({
-      name: values.title,
-      fileId: storageId,
-      orgId: orgId ?? '',
-    });
+    try {
+      await createFile({
+        name: values.title,
+        fileId: storageId,
+        orgId: orgId ?? '',
+      });
+
+      setFileDialogOpen(false);
+
+      toast({
+        variant: 'success',
+        title: 'File Uploaded: Catch Up',
+        description: 'Now everyone can view Your file',
+      });
+    } catch (err) {
+      toast({
+        variant: 'destructive',
+        title: 'Something went wrong',
+        description: 'Your file could not be uploaded',
+      });
+    }
 
     form.reset();
-    setFileDialogOpen(false);
   };
 
   return (
@@ -116,7 +134,14 @@ export default function LandingPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button
+                  type="submit"
+                  className="flex items-center justify-between gap-2"
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
+                  Submit
+                </Button>
               </form>
             </Form>
           </DialogContent>
