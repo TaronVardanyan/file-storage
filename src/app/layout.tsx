@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
-import ConvexClientProvider from './ConvexClientProvider';
+import ConvexClientProvider from '@/providers/ConvexClientProvider';
 import { Toaster } from '@/components/ui/toaster';
-import Header from './header';
+import Header from '@/components/header';
 import './globals.css';
 
 const font = Poppins({
