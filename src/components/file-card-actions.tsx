@@ -15,7 +15,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
 interface Props {
@@ -28,7 +27,6 @@ const FileCardActions = ({ handleDelete }: Props) => {
   return (
     <>
       <AlertDialog open={isConfirmOpen} onOpenChange={setConfirmOpen}>
-        <AlertDialogTrigger>Open</AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
