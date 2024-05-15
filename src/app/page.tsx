@@ -1,8 +1,8 @@
 'use client';
 
 import { useQuery } from 'convex/react';
-import UploadButton from '@/app/upload-button';
-import FileCard from '@/app/file-card';
+import UploadButton from '@/components/upload-button';
+import FileCard from '@/components/file-card';
 import { useOrganization, useUser } from '@clerk/nextjs';
 import { api } from '../../convex/_generated/api';
 
