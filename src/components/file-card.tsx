@@ -34,6 +34,10 @@ const FileCard = ({ file }: Props) => {
     });
   };
 
+  const handleDownload = () => {
+    window.open(file?.url ?? '', '_blank');
+  };
+
   return (
     <Card>
       <CardHeader className="relative">
@@ -53,6 +57,9 @@ const FileCard = ({ file }: Props) => {
         {file.type === 'csv' && <GanttChartIcon className="h-20 w-20" />}
         {file.type === 'pdf' && <FileTextIcon className="h-20 w-20" />}
       </CardContent>
+      <CardFooter className="flex justify-center">
+        <Button onClick={handleDownload}>Download</Button>
+      </CardFooter>
     </Card>
   );
 };
