@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { Doc } from '../../convex/_generated/dataModel';
+import { Doc } from '../../../../convex/_generated/dataModel';
 import { Button } from '@/components/ui/button';
-import FileCardActions from '@/components/file-card-actions';
+import FileCardActions from './file-card-actions';
 import { useMutation } from 'convex/react';
 import Image from 'next/image';
-import { api } from '../../convex/_generated/api';
+import { api } from '../../../../convex/_generated/api';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react';

@@ -3,11 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { useMutation } from 'convex/react';
 import { useOrganization, useUser } from '@clerk/nextjs';
-import { api } from '../../convex/_generated/api';
+import { api } from '../../../../convex/_generated/api';
 import { useToast } from '@/components/ui/use-toast';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { Doc } from '../../convex/_generated/dataModel';
+import { Doc } from '../../../../convex/_generated/dataModel';
 import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
