@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Trash2, MoreVertical } from 'lucide-react';
+import { Trash2, MoreVertical, StarIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
   DropdownMenuItem,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
@@ -19,9 +20,10 @@ import {
 
 interface Props {
   handleDelete: () => void;
+  handleFavorite: () => void;
 }
 
-const FileCardActions = ({ handleDelete }: Props) => {
+const FileCardActions = ({ handleDelete, handleFavorite }: Props) => {
   const [isConfirmOpen, setConfirmOpen] = useState(false);
 
   return (
@@ -46,6 +48,13 @@ const FileCardActions = ({ handleDelete }: Props) => {
           <MoreVertical />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
+          <DropdownMenuItem
+            className="flex cursor-pointer items-center gap-1"
+            onClick={handleFavorite}
+          >
+            <StarIcon className="mr-2 h-4 w-4" /> Favorite
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex cursor-pointer items-center gap-1 text-red-600"
             onClick={() => setConfirmOpen(true)}
