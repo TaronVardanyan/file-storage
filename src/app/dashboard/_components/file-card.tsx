@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Doc } from '../../../../convex/_generated/dataModel';
+import { Doc, Id } from '../../../../convex/_generated/dataModel';
 import { Button } from '@/components/ui/button';
 import FileCardActions from './file-card-actions';
 import { useMutation } from 'convex/react';
@@ -11,12 +11,15 @@ import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react';
 
 interface Props {
   file: Doc<'files'> & { url: string | null };
+  favorites: Doc<'favorites'>[];
 }
 
-const FileCard = ({ file }: Props) => {
+const FileCard = ({ file, favorites }: Props) => {
   const { toast } = useToast();
   const deleteFile = useMutation(api.files.deleteFile);
   const favorite = useMutation(api.files.toggleFavorite);
+
+  const isFavorited = favorites.some((favorite) => favorite.fileId === file._id);
 
   const typeIcons = {
     image: <ImageIcon />,
@@ -53,7 +56,11 @@ const FileCard = ({ file }: Props) => {
           {file.name}
         </CardTitle>
         <div className="absolute right-2 top-4">
-          <FileCardActions handleFavorite={handleFavorite} handleDelete={handleDelete} />
+          <FileCardActions
+            isFavorited={isFavorited}
+            handleFavorite={handleFavorite}
+            handleDelete={handleDelete}
+          />
         </div>
       </CardHeader>
       <CardContent className="flex h-[200px] items-center justify-center">
