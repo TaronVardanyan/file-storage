@@ -1,9 +1,11 @@
+'use client';
+
 import FilesBrowser from '../_components/files-browser';
 
 export default function FavoritesPage() {
   return (
     <div>
-      <FilesBrowser title="Your Favorites" />
+      <FilesBrowser title="Your Favorites" favorites={true} />
     </div>
   );
 }

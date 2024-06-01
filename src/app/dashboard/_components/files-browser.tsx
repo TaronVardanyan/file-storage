@@ -10,13 +10,18 @@ import { api } from '../../../../convex/_generated/api';
 import Image from 'next/image';
 import { Loader2 } from 'lucide-react';
 
-export default function FilesBrowser({ title }: { title: string }) {
+interface Props {
+  title: string;
+  favorites?: boolean;
+}
+
+export default function FilesBrowser({ title, favorites = false }: Props) {
   const { organization } = useOrganization();
   const [query, setQuery] = useState('');
 
   const user = useUser();
   const orgId = organization?.id ?? user.user?.id;
-  const files = useQuery(api.files.getFiles, orgId ? { orgId, query } : 'skip');
+  const files = useQuery(api.files.getFiles, orgId ? { orgId, query, favorites } : 'skip');
 
   return (
     <div className="w-full">
