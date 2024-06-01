@@ -16,6 +16,7 @@ interface Props {
 const FileCard = ({ file }: Props) => {
   const { toast } = useToast();
   const deleteFile = useMutation(api.files.deleteFile);
+  const favorite = useMutation(api.files.toggleFavorite);
 
   const typeIcons = {
     image: <ImageIcon />,
@@ -34,6 +35,12 @@ const FileCard = ({ file }: Props) => {
     });
   };
 
+  const handleFavorite = async () => {
+    await favorite({
+      fileId: file._id,
+    });
+  };
+
   const handleDownload = () => {
     window.open(file?.url ?? '', '_blank');
   };
@@ -46,7 +53,7 @@ const FileCard = ({ file }: Props) => {
           {file.name}
         </CardTitle>
         <div className="absolute right-2 top-4">
-          <FileCardActions handleDelete={handleDelete} />
+          <FileCardActions handleFavorite={handleFavorite} handleDelete={handleDelete} />
         </div>
       </CardHeader>
       <CardContent className="flex h-[200px] items-center justify-center">
