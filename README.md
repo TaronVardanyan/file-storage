@@ -22,7 +22,7 @@
   <h2>Getting Started</h2>
   <ol>
     <li><strong>Installation</strong>: Clone the repository and install dependencies.</li>
-    <pre><code>git clone https://github.com/your-username/file-storage.git
+    <pre><code>git clone https://github.com/TaronVardanyan/file-storage.git
 cd file-storage
 bun install
 </code></pre>
