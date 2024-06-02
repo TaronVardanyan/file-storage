@@ -8,8 +8,6 @@
 <body>
   <h1>File Storage</h1>
 
-  <img src="https://example.com/logo.png" alt="File Storage Logo">
-
   <p>File Storage is a project aimed at providing secure and efficient file storage solutions. It leverages modern web technologies to offer a reliable platform for storing and managing files.</p>
 
   <h2>Features</h2>
