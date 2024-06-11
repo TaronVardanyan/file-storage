@@ -1,6 +1,5 @@
 import { mutation, query, QueryCtx, MutationCtx } from './_generated/server';
 import { v, ConvexError } from 'convex/values';
-import { getUser } from './users';
 import { fileTypes } from './schema';
 import { Id } from './_generated/dataModel';
 
@@ -30,7 +29,8 @@ async function hasAccessToOrg(ctx: QueryCtx | MutationCtx, orgId: string) {
     return null;
   }
 
-  const hasAccess = user.orgIds.includes(orgId) || user.tokenIdentifier.includes(orgId);
+  const hasAccess =
+    user.orgIds.some((item) => item.orgId === orgId) || user.tokenIdentifier.includes(orgId);
 
   if (!hasAccess) {
     return null;
@@ -119,7 +119,14 @@ export const deleteFile = mutation({
       throw new ConvexError('No access to file');
     }
 
-    await ctx.db.delete(args.fileId);
+    const isAdmin =
+      access.user.orgIds.find((org) => org.orgId === access.file.orgId)?.role === 'admin';
+
+    if (!isAdmin) {
+      throw new ConvexError('No access to file');
+    }
+
+    ctx.db.delete(args.fileId);
   },
 });
 
