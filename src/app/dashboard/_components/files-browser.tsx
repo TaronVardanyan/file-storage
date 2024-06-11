@@ -13,9 +13,10 @@ import { Loader2 } from 'lucide-react';
 interface Props {
   title: string;
   isFavorites?: boolean;
+  deleteOnly?: boolean;
 }
 
-export default function FilesBrowser({ title, isFavorites = false }: Props) {
+export default function FilesBrowser({ title, isFavorites = false, deleteOnly = false }: Props) {
   const { organization } = useOrganization();
   const [query, setQuery] = useState('');
 
@@ -24,7 +25,7 @@ export default function FilesBrowser({ title, isFavorites = false }: Props) {
   const favorites = useQuery(api.files.getAllFavorites, orgId ? { orgId } : 'skip');
   const files = useQuery(
     api.files.getFiles,
-    orgId ? { orgId, query, favorites: isFavorites } : 'skip',
+    orgId ? { orgId, query, favorites: isFavorites, deleteOnly } : 'skip',
   );
 
   return (

@@ -33,8 +33,8 @@ const FileCard = ({ file, favorites }: Props) => {
     });
     toast({
       variant: 'default',
-      title: 'File was deleted',
-      description: 'File was successfuly removed from the system',
+      title: 'File marked for deletion!',
+      description: 'File will be deleted soon',
     });
   };
 
