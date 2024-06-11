@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Trash2, MoreVertical, StarIcon, StarHalf } from 'lucide-react';
+import { Trash2, MoreVertical, StarIcon, StarHalf, UndoIcon } from 'lucide-react';
 import { Protect } from '@clerk/nextjs';
 import {
   DropdownMenu,
@@ -22,10 +22,18 @@ import {
 interface Props {
   handleDelete: () => void;
   handleFavorite: () => void;
+  handleRestore: () => void;
   isFavorited: boolean;
+  shouldDelete?: boolean;
 }
 
-const FileCardActions = ({ handleDelete, handleFavorite, isFavorited }: Props) => {
+const FileCardActions = ({
+  handleDelete,
+  handleFavorite,
+  isFavorited,
+  shouldDelete,
+  handleRestore,
+}: Props) => {
   const [isConfirmOpen, setConfirmOpen] = useState(false);
 
   return (
@@ -69,10 +77,18 @@ const FileCardActions = ({ handleDelete, handleFavorite, isFavorited }: Props) =
           <Protect role="org:admin" fallback={<></>}>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              className="flex cursor-pointer items-center gap-1 text-red-600"
-              onClick={() => setConfirmOpen(true)}
+              className="flex cursor-pointer items-center gap-1"
+              onClick={() => (shouldDelete ? handleRestore() : setConfirmOpen(true))}
             >
-              <Trash2 className="mr-2 h-4 w-4" /> Delete
+              {shouldDelete ? (
+                <div className="flex items-center gap-1 text-green-600">
+                  <UndoIcon className="mr-2 h-4 w-4" /> Restore
+                </div>
+              ) : (
+                <div className="flex items-center gap-1 text-red-600">
+                  <Trash2 className="mr-2 h-4 w-4" /> Delete
+                </div>
+              )}
             </DropdownMenuItem>
           </Protect>
         </DropdownMenuContent>
