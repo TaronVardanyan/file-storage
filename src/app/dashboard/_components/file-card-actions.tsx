@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Trash2, MoreVertical, StarIcon, StarHalf } from 'lucide-react';
+import { Protect } from '@clerk/nextjs';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -65,13 +66,15 @@ const FileCardActions = ({ handleDelete, handleFavorite, isFavorited }: Props) =
               </>
             )}
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="flex cursor-pointer items-center gap-1 text-red-600"
-            onClick={() => setConfirmOpen(true)}
-          >
-            <Trash2 className="mr-2 h-4 w-4" /> Delete
-          </DropdownMenuItem>
+          <Protect role="org:admin" fallback={<></>}>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center gap-1 text-red-600"
+              onClick={() => setConfirmOpen(true)}
+            >
+              <Trash2 className="mr-2 h-4 w-4" /> Delete
+            </DropdownMenuItem>
+          </Protect>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
