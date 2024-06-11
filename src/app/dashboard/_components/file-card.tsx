@@ -8,6 +8,7 @@ import { api } from '../../../../convex/_generated/api';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react';
+import { restoreFile } from '../../../../convex/files';
 
 interface Props {
   file: Doc<'files'> & { url: string | null };
@@ -17,6 +18,7 @@ interface Props {
 const FileCard = ({ file, favorites }: Props) => {
   const { toast } = useToast();
   const deleteFile = useMutation(api.files.deleteFile);
+  const restoreFile = useMutation(api.files.restoreFile);
   const favorite = useMutation(api.files.toggleFavorite);
 
   const isFavorited = favorites.some((favorite) => favorite.fileId === file._id);
@@ -35,6 +37,16 @@ const FileCard = ({ file, favorites }: Props) => {
       variant: 'default',
       title: 'File marked for deletion!',
       description: 'File will be deleted soon',
+    });
+  };
+
+  const handleRestore = async () => {
+    await restoreFile({
+      fileId: file._id,
+    });
+    toast({
+      variant: 'default',
+      title: 'File was restored!',
     });
   };
 
@@ -60,6 +72,8 @@ const FileCard = ({ file, favorites }: Props) => {
             isFavorited={isFavorited}
             handleFavorite={handleFavorite}
             handleDelete={handleDelete}
+            handleRestore={handleRestore}
+            shouldDelete={file.shouldDelete}
           />
         </div>
       </CardHeader>
