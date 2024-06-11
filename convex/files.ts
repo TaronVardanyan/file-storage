@@ -67,6 +67,7 @@ export const getFiles = query({
     orgId: v.string(),
     query: v.optional(v.string()),
     favorites: v.optional(v.boolean()),
+    deleteOnly: v.optional(v.boolean()),
   },
   async handler(ctx, args) {
     const hasAccess = await hasAccessToOrg(ctx, args.orgId);
@@ -95,6 +96,12 @@ export const getFiles = query({
         .collect();
 
       files = files.filter((file) => favorites.some((favorite) => favorite.fileId === file._id));
+    }
+
+    if (args.deleteOnly) {
+      files = files.filter((file) => file.shouldDelete);
+    } else {
+      files = files.filter((file) => !file.shouldDelete);
     }
 
     const filesWithUrl = await Promise.all(
@@ -126,7 +133,9 @@ export const deleteFile = mutation({
       throw new ConvexError('No access to file');
     }
 
-    ctx.db.delete(args.fileId);
+    await ctx.db.patch(args.fileId, {
+      shouldDelete: true,
+    });
   },
 });
 
