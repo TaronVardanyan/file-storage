@@ -1,14 +1,14 @@
 import { ReactNode } from 'react';
-import { Doc, Id } from '../../../../convex/_generated/dataModel';
-import { Button } from '@/components/ui/button';
+import { Doc } from '../../../../convex/_generated/dataModel';
 import FileCardActions from './file-card-actions';
-import { useMutation } from 'convex/react';
+import { formatRelative, subDays } from 'date-fns';
+import { useMutation, useQuery } from 'convex/react';
 import Image from 'next/image';
 import { api } from '../../../../convex/_generated/api';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react';
-import { restoreFile } from '../../../../convex/files';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface Props {
   file: Doc<'files'> & { url: string | null };
@@ -20,6 +20,9 @@ const FileCard = ({ file, favorites }: Props) => {
   const deleteFile = useMutation(api.files.deleteFile);
   const restoreFile = useMutation(api.files.restoreFile);
   const favorite = useMutation(api.files.toggleFavorite);
+  const userProfile = useQuery(api.users.getUserProfile, {
+    userId: file.userId,
+  });
 
   const isFavorited = favorites.some((favorite) => favorite.fileId === file._id);
 
@@ -63,7 +66,7 @@ const FileCard = ({ file, favorites }: Props) => {
   return (
     <Card>
       <CardHeader className="relative">
-        <CardTitle className="flex gap-2 text-base font-normal">
+        <CardTitle className="mb-6 flex gap-2 text-base font-normal">
           <div className="mr-1 flex justify-center">{typeIcons[file.type]}</div>
           {file.name}
         </CardTitle>
@@ -74,6 +77,7 @@ const FileCard = ({ file, favorites }: Props) => {
             handleDelete={handleDelete}
             handleRestore={handleRestore}
             shouldDelete={file.shouldDelete}
+            handleDownload={handleDownload}
           />
         </div>
       </CardHeader>
@@ -85,8 +89,17 @@ const FileCard = ({ file, favorites }: Props) => {
         {file.type === 'csv' && <GanttChartIcon className="h-20 w-20" />}
         {file.type === 'pdf' && <FileTextIcon className="h-20 w-20" />}
       </CardContent>
-      <CardFooter className="flex justify-center">
-        <Button onClick={handleDownload}>Download</Button>
+      <CardFooter className="mt-6 flex justify-between gap-4">
+        <div className="flex w-60 items-center justify-start gap-2 text-xs text-gray-700">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src={userProfile?.image} />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          {userProfile?.name}
+        </div>
+        <div className="text-xs text-gray-700">
+          Uploaded on {formatRelative(new Date(file._creationTime), new Date())}
+        </div>
       </CardFooter>
     </Card>
   );
