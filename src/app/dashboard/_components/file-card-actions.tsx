@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Trash2, MoreVertical, StarIcon, StarHalf, UndoIcon } from 'lucide-react';
+import { Trash2, MoreVertical, StarIcon, StarHalf, UndoIcon, Download } from 'lucide-react';
 import { Protect } from '@clerk/nextjs';
 import {
   DropdownMenu,
@@ -23,6 +23,7 @@ interface Props {
   handleDelete: () => void;
   handleFavorite: () => void;
   handleRestore: () => void;
+  handleDownload: () => void;
   isFavorited: boolean;
   shouldDelete?: boolean;
 }
@@ -33,6 +34,7 @@ const FileCardActions = ({
   isFavorited,
   shouldDelete,
   handleRestore,
+  handleDownload,
 }: Props) => {
   const [isConfirmOpen, setConfirmOpen] = useState(false);
 
@@ -89,6 +91,12 @@ const FileCardActions = ({
                   <Trash2 className="mr-2 h-4 w-4" /> Delete
                 </div>
               )}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center gap-1"
+              onClick={handleDownload}
+            >
+              <Download className="mr-2 h-4 w-4" /> Download
             </DropdownMenuItem>
           </Protect>
         </DropdownMenuContent>
