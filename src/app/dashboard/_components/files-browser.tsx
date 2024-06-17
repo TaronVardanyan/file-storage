@@ -9,6 +9,8 @@ import { useOrganization, useUser } from '@clerk/nextjs';
 import { api } from '../../../../convex/_generated/api';
 import Image from 'next/image';
 import { Loader2 } from 'lucide-react';
+import { DataTable } from './file-table';
+import { columns } from './columns';
 
 interface Props {
   title: string;
@@ -28,6 +30,17 @@ export default function FilesBrowser({ title, isFavorites = false, deleteOnly = 
     orgId ? { orgId, query, favorites: isFavorites, deleteOnly } : 'skip',
   );
 
+  const filesData = files?.map((file) => ({
+    name: file.name,
+    type: file.type,
+    userId: file.userId,
+    _creationTime: file._creationTime,
+    shouldDelete: file.shouldDelete,
+    isFavorited: favorites?.some((favorite) => favorite.fileId === file._id),
+    _id: file._id,
+    url: file.url,
+  }));
+
   return (
     <div className="w-full">
       <div className="mb-8 flex items-center justify-between">
@@ -35,6 +48,7 @@ export default function FilesBrowser({ title, isFavorites = false, deleteOnly = 
         <SearchBar setQuery={setQuery} query={query} />
         <UploadButton />
       </div>
+      {filesData && <DataTable columns={columns} data={filesData} />}
       {files === undefined && (
         <div className="flex items-center justify-center">
           <Loader2 className="h-20 w-20 animate-spin text-gray-500" />
