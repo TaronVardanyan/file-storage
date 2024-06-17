@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Doc } from '../../../../convex/_generated/dataModel';
 import FileCardActions from './file-card-actions';
-import { formatRelative, subDays } from 'date-fns';
+import { formatRelative } from 'date-fns';
 import { useMutation, useQuery } from 'convex/react';
 import Image from 'next/image';
 import { api } from '../../../../convex/_generated/api';
@@ -36,6 +36,7 @@ const FileCard = ({ file, favorites }: Props) => {
     await deleteFile({
       fileId: file._id,
     });
+
     toast({
       variant: 'default',
       title: 'File marked for deletion!',
