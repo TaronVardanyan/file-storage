@@ -26,6 +26,8 @@ interface Props {
   handleDownload: () => void;
   isFavorited: boolean;
   shouldDelete?: boolean;
+  userId: string;
+  myId?: string;
 }
 
 const FileCardActions = ({
@@ -35,6 +37,8 @@ const FileCardActions = ({
   shouldDelete,
   handleRestore,
   handleDownload,
+  userId,
+  myId,
 }: Props) => {
   const [isConfirmOpen, setConfirmOpen] = useState(false);
 
@@ -76,7 +80,16 @@ const FileCardActions = ({
               </>
             )}
           </DropdownMenuItem>
-          <Protect role="org:admin" fallback={<></>}>
+          <Protect
+            condition={(check) => {
+              return (
+                check({
+                  role: 'org:admin',
+                }) || userId === myId
+              );
+            }}
+            fallback={<></>}
+          >
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="flex cursor-pointer items-center gap-1"
