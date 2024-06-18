@@ -23,6 +23,7 @@ const FileCard = ({ file, favorites }: Props) => {
   const userProfile = useQuery(api.users.getUserProfile, {
     userId: file.userId,
   });
+  const me = useQuery(api.users.getMe);
 
   const isFavorited = favorites.some((favorite) => favorite.fileId === file._id);
 
@@ -79,6 +80,8 @@ const FileCard = ({ file, favorites }: Props) => {
             handleRestore={handleRestore}
             shouldDelete={file.shouldDelete}
             handleDownload={handleDownload}
+            userId={file.userId}
+            myId={me?._id}
           />
         </div>
       </CardHeader>
